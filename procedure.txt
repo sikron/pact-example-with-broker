@@ -1,0 +1,32 @@
+v1. generate pact file via junit test
+    - https://github.com/DiUS/pact-jvm/tree/master/pact-jvm-consumer-junit
+    - https://www.javacodegeeks.com/2017/03/consumer-driven-testing-pact-spring-boot.html
+    - the spring-mvc consumer seems to be not maintained currently (no checkins)
+    - just run "mvn clean install -DskipTests=false"
+        - result is a json pact file in consumer/target/pacts
+
+v2. producer should be verified with pact file (pact file is accessed via path)
+    - https://www.javacodegeeks.com/2017/03/consumer-driven-testing-pact-spring-boot.html
+    - https://github.com/DiUS/pact-workshop-jvm
+    - https://github.com/DiUS/pact-jvm/tree/master/pact-jvm-provider-junit
+    - in order to manipulate the producer states, the testing is not done against a deployed WAR but in-memory via spring boot
+    - could be done by database statements otherwise, or with CRUD calls on REST
+    - so just "mvn clean install -DskipTests=false"
+        - the pact files are specified via @PactFolder("/home/simon/dev/workspaces/java/pact-demo-parent/consumer/target/pacts")
+        - examples for @State are given and how the service can be modified accordingly
+
+3. use a pact broker. consumer uploads its file there, producer gets his pacts from there. use dockerized broker
+    - https://github.com/DiUS/pact_broker-docker
+    - configure e.g. authentication
+    - use docker-compose for example, cd pact-broker && docker-compose up -d
+    - mvn pact:publish
+    - go to localhost:80
+
+4. try states. in the producer tests some methods must be annotated with @State. there inject DAOs or so to manipulate
+   the producer state accordingly.
+    - start the producer tests to see, that the producer fulfills all client contracts
+    - currently the pact broker infos are defined in the tests itself, so that they can also be started by the IDE itself
+    - otherwise, the pact files must be fetched from the broker before the tests start, e.g. by the maven plugin?
+        - https://github.com/DiUS/pact-jvm/tree/master/pact-jvm-provider-maven
+    - or the maven pact plugin must perform the verification itself somehow??
+    - anyway, start the tests by IDE or mvn clean install -DskipTests=false
