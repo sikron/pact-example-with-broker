@@ -1,0 +1,38 @@
+name: Test with pact broker
+on: 
+  - pull_request
+  - push
+
+jobs:
+  consumer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fill credentials
+        run: |
+          sed -i 's/CHANGEME_USERNAME/${{ secrets.PACTBROKER_USERNAME }}/g' consumer/pom.xml
+          sed -i 's/CHANGEME_PASSWORD/${{ secrets.PACTBROKER_PASSWORD }}/g' consumer/pom.xml
+
+      - name: build
+        run: mvn clean install -DskipTests=false
+        working-directory: consumer
+
+      - name: publish pact
+        run: mvn pact:publish
+        working-directory: consumer
+
+  producer:
+    needs: consumer
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fill credentials
+        run: |
+          sed -i 's/CHANGEME_USERNAME/${{ secrets.PACTBROKER_USERNAME }}/g' producer/src/test/java/com/skronawi/example/pact/producer/ProducerPactIT.java
+          sed -i 's/CHANGEME_PASSWORD/${{ secrets.PACTBROKER_PASSWORD }}/g' producer/src/test/java/com/skronawi/example/pact/producer/ProducerPactIT.java
+
+      - name: build and vetify
+        run: mvn clean install -DskipTests=false
+        working-directory: producer

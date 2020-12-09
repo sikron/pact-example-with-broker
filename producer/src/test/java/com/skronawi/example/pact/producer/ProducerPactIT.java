@@ -23,7 +23,7 @@ import java.util.Optional;
 @Provider("producer_provider") //so that pact knows, which pact files should be verified
 @VerificationReports("console")
 //@PactFolder("/home/simon/dev/workspaces/java/pact-demo-parent/consumer/target/pacts")
-@PactBroker(host = "localhost", port = "80", authentication = @PactBrokerAuth(username = "pact", password = "pact"))
+@PactBroker(host = "pact-broker.retailsvc.com", port = "443", scheme = "https", authentication = @PactBrokerAuth(username = "CHANGEME_USERNAME", password = "CHANGEME_PASSWORD"))
 public class ProducerPactIT {
 
     private static ConfigurableApplicationContext context;

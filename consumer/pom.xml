@@ -86,9 +86,9 @@
                 <artifactId>pact-jvm-provider-maven_2.11</artifactId>
                 <version>3.5.0</version>
                 <configuration>
-                    <pactBrokerUrl>http://localhost:80</pactBrokerUrl>
-                    <pactBrokerPassword>pact</pactBrokerPassword>
-                    <pactBrokerUsername>pact</pactBrokerUsername>
+                    <pactBrokerUrl>https://pact-broker.retailsvc.com</pactBrokerUrl>
+                    <pactBrokerPassword>CHANGEME_PASSWORD</pactBrokerPassword>
+                    <pactBrokerUsername>CHANGEME_USERNAME</pactBrokerUsername>
                     <!--<pactDirectory>path/to/pact/files</pactDirectory>--> <!-- Defaults to ${project.build.directory}/pacts -->
                     <!--
                     1.5.4.RELEASE is rejected by the broker:
